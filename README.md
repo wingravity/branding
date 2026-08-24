@@ -1,10 +1,15 @@
 <div align="center">
 
-<img src="docs/assets/banner.png" alt="Wingravity" width="100%">
-
 <br>
 
-**Wingravity brand system.** Tokens, logo, and the generators that use them.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/logo/wordmark-on-dark.svg">
+  <img src="brand/logo/wordmark-on-light.svg" alt="Wingravity" width="320">
+</picture>
+
+<br><br>
+
+**Brand system.** Tokens, logo, and the generators that use them.
 
 <a href="https://wingravity.com">Website</a> &nbsp;·&nbsp;
 <a href="https://docs.wingravity.com">Handbook</a> &nbsp;·&nbsp;

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Renders the imagery used by README.md: the banner, the palette strip and the
- * type specimen.
+ * Renders the imagery used by README.md: the palette strip and the type
+ * specimen. The wordmark itself is referenced straight from brand/logo/, so it
+ * stays theme-aware on GitHub rather than being baked into a slab.
  *
  * These are documentation assets, so unlike tool output they are committed —
  * a README has to render for someone browsing GitHub, who is not going to run
@@ -22,45 +23,6 @@ body{background:${C.gray["900"]};font-family:"Kanit",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased}
 .mono{font-family:"Space Mono",ui-monospace,monospace}
 `;
-
-/* ---------------------------------------------------------------- banner -- */
-
-const BANNER_W = 1280;
-const BANNER_H = 420;
-
-const banner = `<!doctype html><html><head><meta charset="utf-8"><style>${BASE}
-.stage{position:relative;width:${BANNER_W}px;height:${BANNER_H}px;overflow:hidden;
-  background:
-    radial-gradient(110% 90% at 8% 0%, rgba(100,219,202,.20), transparent 56%),
-    radial-gradient(80% 70% at 96% 100%, rgba(100,219,202,.10), transparent 60%),
-    linear-gradient(158deg,#1e2025 0%, ${C.gray["900"]} 48%, #0e0e10 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring{position:absolute;border-radius:50%;border:1px solid rgba(100,219,202,.10);
-  left:-420px;top:50%;transform:translateY(-50%)}
-.r1{width:900px;height:900px}
-.r2{width:1300px;height:1300px;border-color:rgba(100,219,202,.06)}
-.r3{width:1750px;height:1750px;border-color:rgba(100,219,202,.04)}
-.dot{position:absolute;left:214px;top:104px;width:9px;height:9px;border-radius:50%;
-  background:${C.primary};box-shadow:0 0 20px 5px rgba(100,219,202,.5)}
-.inner{position:relative;text-align:center}
-.eyebrow{font-size:13px;font-weight:400;letter-spacing:.32em;text-transform:uppercase;
-  color:${C.primary};opacity:.85;margin-bottom:30px}
-.logo{width:440px;margin:0 auto}
-.logo svg{width:100%;height:auto;display:block}
-.tagline{margin-top:34px;font-size:23px;font-weight:300;color:${C.gray["400"]};
-  letter-spacing:.005em}
-.vignette{position:absolute;inset:0;
-  background:radial-gradient(120% 95% at 50% 45%,transparent 42%,rgba(0,0,0,.5) 100%)}
-</style></head><body><div class="stage">
-  <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-  <div class="dot"></div>
-  <div class="vignette"></div>
-  <div class="inner">
-    <div class="eyebrow mono">Brand system</div>
-    <div class="logo">${wordmark("dark")}</div>
-    <div class="tagline">Build your MVP. Launch your product. Scale what works.</div>
-  </div>
-</div></body></html>`;
 
 /* --------------------------------------------------------------- palette -- */
 
@@ -140,7 +102,6 @@ const type = `<!doctype html><html><head><meta charset="utf-8"><style>${BASE}
 /* ----------------------------------------------------------------- render -- */
 
 const JOBS = [
-  { name: "banner.png", html: banner, width: BANNER_W, height: BANNER_H },
   { name: "palette.png", html: palette, width: PALETTE_W, height: PALETTE_H },
   { name: "type.png", html: type, width: TYPE_W, height: TYPE_H },
 ];
