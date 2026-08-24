@@ -82,6 +82,7 @@ self-hosted in production. Do not hotlink Google Fonts.
 | [`lib/`](lib/) | Shared renderer and token loader. |
 | [`scripts/`](scripts/) | Repo-level generators, including this page's imagery. |
 | [`docs/assets/`](docs/assets/) | Committed documentation imagery. |
+| [`TRADEMARK.md`](TRADEMARK.md) | What may be done with the name and the mark. |
 
 Each folder has its own README. No install step; rendering uses the Chrome
 already on your machine.
@@ -97,6 +98,8 @@ already on your machine.
 - Name the awkward part: fixed scope, named price, no handoffs to juniors.
 - Sentence case in headings and UI.
 - "Wingravity" is one word, capital W. Lowercase only inside the wordmark.
+- Mark the first prominent use in marketing as Wingravity&trade;. Never &reg; —
+  the mark is not registered. Rules in [`TRADEMARK.md`](TRADEMARK.md).
 - Avoid: revolutionary, cutting-edge, world-class, synergy, unlock, supercharge.
 
 <br>
@@ -116,7 +119,9 @@ already on your machine.
 
 ## Roadmap
 
-- [ ] `LICENSE` and `TRADEMARK.md`. Code and tokens open, name and logo not.
+- [x] `TRADEMARK.md`. Name and logo reserved.
+- [ ] `LICENSE` for the code and tokens, with a trademark carve-out clause
+      pointing at [`TRADEMARK.md`](TRADEMARK.md).
 - [ ] **Standalone mark.** No vector symbol exists, only the wordmark, and the
       app icon is a raster PNG wrapped in an SVG. Every square context (avatars,
       favicons, Slack) is unserved. Biggest gap in the system.
@@ -133,8 +138,9 @@ already on your machine.
 <div align="center">
 <sub>
 
-Typefaces licensed under the SIL Open Font License. The Wingravity name and logo
-are trademarks, not covered by any code license in this repository.
+Typefaces licensed under the SIL Open Font License. Wingravity&trade; and the
+Wingravity wordmark are trademarks, not covered by any code license in this
+repository. See <a href="TRADEMARK.md">TRADEMARK.md</a>.
 
 </sub>
 </div>

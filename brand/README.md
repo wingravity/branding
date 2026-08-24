@@ -70,6 +70,9 @@ teal only as an underline or bullet. `primaryDeep` at large sizes only.
 No standalone mark exists, only the wordmark. See the
 [roadmap](../README.md#roadmap).
 
+The wordmark is a trademark, not an open asset. Third-party use, modification
+and naming rules are in [`TRADEMARK.md`](../TRADEMARK.md).
+
 ## Fonts
 
 | Role | Family | Weights |
