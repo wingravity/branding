@@ -5,8 +5,10 @@
  * Renders each design to PNG through the Chrome already installed on this
  * machine — no npm dependencies, nothing to download.
  *
- *   node generate.mjs                        # all designs, 1920x1080
+ *   node generate.mjs                        # every design, both themes
  *   node generate.mjs --design horizon       # just one
+ *   node generate.mjs --theme light          # just the light ground
+ *   node generate.mjs --mirror on            # pre-flipped for your self-view
  *   node generate.mjs --scale 2              # 3840x2160
  *   node generate.mjs --position top-left    # move the wordmark
  *   node generate.mjs --guides               # overlay safe-zone guides
@@ -17,15 +19,44 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { screenshot } from "../lib/chrome.mjs";
 import { designs, designNames } from "./src/designs.mjs";
+import { themes, themeNames } from "./src/themes.mjs";
 import { buildPage, positions, WIDTH, HEIGHT } from "./src/page.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
+/** `both` on a variant axis means "render every value of it". */
+const VARIANTS = { off: [false], on: [true], both: [false, true] };
+
+/**
+ * The corner the wordmark sits in is a variant axis too. `both` is the two
+ * corners that clear the name chip and the control bar; `all` is every corner,
+ * and a comma-separated list works as well.
+ */
+const POSITION_SETS = {
+  both: ["bottom-right", "top-right"],
+  all: Object.keys(positions),
+};
+
+function resolvePositions(spec) {
+  const wanted = POSITION_SETS[spec] ?? spec.split(",").map((p) => p.trim());
+  for (const p of wanted) {
+    if (!Object.hasOwn(positions, p)) {
+      throw new Error(
+        `Unknown position "${p}". Use one of: ${Object.keys(positions).join(", ")}, ` +
+          `${Object.keys(POSITION_SETS).join(", ")}, or a comma-separated list.`
+      );
+    }
+  }
+  return wanted;
+}
+
 function parseArgs(argv) {
   const opts = {
     design: null,
+    theme: "both",
+    mirror: "off",
     scale: 1,
-    position: "bottom-right",
+    position: "both",
     logoWidth: 360,
     outDir: join(HERE, "out"),
     guides: false,
@@ -39,6 +70,8 @@ function parseArgs(argv) {
     };
     switch (arg) {
       case "--design": case "-d": opts.design = value(); break;
+      case "--theme": case "-t": opts.theme = value(); break;
+      case "--mirror": case "-m": opts.mirror = value(); break;
       case "--scale": case "-s": opts.scale = Number(value()); break;
       case "--position": case "-p": opts.position = value(); break;
       case "--logo-width": opts.logoWidth = Number(value()); break;
@@ -58,10 +91,16 @@ Wingravity virtual background generator
   node generate.mjs [options]
 
   -d, --design <name>     Render one design (default: all)
+  -t, --theme <name>      ${themeNames.join(" | ")} | both (default: both)
+  -m, --mirror <state>    off | on | both (default: off)
+                          "on" pre-flips the frame, so it reads correctly in
+                          your own mirrored self-view and flipped to everyone
+                          else. See the README before choosing it.
   -s, --scale <1|2>       1 = 1920x1080, 2 = 3840x2160 (default: 1)
   -p, --position <where>  Wordmark corner: ${Object.keys(positions).join(" | ")}
-                          (default: bottom-right — the other corners collide
-                          with the name chip on Meet, Zoom and Teams)
+                          | both | all | a comma-separated list
+                          (default: both — bottom-right and top-right, the two
+                          that clear the name chip and the control bar)
       --logo-width <px>   Wordmark width in the 1920x1080 space (default: 360)
   -o, --out <dir>         Output directory (default: ./out)
       --guides            Overlay subject and platform-UI safe zones
@@ -69,18 +108,25 @@ Wingravity virtual background generator
   -h, --help              Show this help
 `;
 
-async function render({ design, name, opts }) {
+const DEFAULT_POSITION = "bottom-right";
+
+async function render({ name, themeName, position, mirror, opts }) {
   const html = buildPage({
-    design,
+    design: designs[name],
+    theme: themes[themeName],
     logoWidth: opts.logoWidth,
-    position: opts.position,
+    position,
     guides: opts.guides,
+    mirror,
   });
 
-  const suffix = opts.guides ? "-guides" : "";
   const w = WIDTH * opts.scale;
   const h = HEIGHT * opts.scale;
-  const outPath = join(opts.outDir, `wingravity-${name}-${w}x${h}${suffix}.png`);
+  const suffix =
+    `${position === DEFAULT_POSITION ? "" : `-${position}`}` +
+    `${mirror ? "-mirrored" : ""}${opts.guides ? "-guides" : ""}`;
+  const file = `wingravity-${name}-${themeName}-${w}x${h}${suffix}.png`;
+  const outPath = join(opts.outDir, file);
 
   await screenshot({ html, width: WIDTH, height: HEIGHT, outPath, scale: opts.scale });
   return { outPath, bytes: statSync(outPath).size, w, h };
@@ -94,11 +140,15 @@ async function main() {
     for (const n of designNames) console.log(`  ${n.padEnd(11)} ${designs[n].description}`);
     return;
   }
-  if (!Object.hasOwn(positions, opts.position)) {
-    throw new Error(`Unknown position "${opts.position}". Use one of: ${Object.keys(positions).join(", ")}`);
-  }
+  const selectedPositions = resolvePositions(opts.position);
   if (![1, 2].includes(opts.scale)) {
     throw new Error(`--scale must be 1 or 2, got "${opts.scale}".`);
+  }
+  if (!Object.hasOwn(VARIANTS, opts.mirror)) {
+    throw new Error(`--mirror must be ${Object.keys(VARIANTS).join(", ")}; got "${opts.mirror}".`);
+  }
+  if (opts.theme !== "both" && !Object.hasOwn(themes, opts.theme)) {
+    throw new Error(`Unknown theme "${opts.theme}". Use one of: ${themeNames.join(", ")}, both`);
   }
   const selected = opts.design ? [opts.design] : designNames;
   for (const name of selected) {
@@ -106,15 +156,25 @@ async function main() {
       throw new Error(`Unknown design "${name}". Available: ${designNames.join(", ")}`);
     }
   }
+  const selectedThemes = opts.theme === "both" ? themeNames : [opts.theme];
+  const mirrors = VARIANTS[opts.mirror];
 
   mkdirSync(opts.outDir, { recursive: true });
 
-  for (const name of selected) {
-    const { outPath, bytes, w, h } = await render({ design: designs[name], name, opts });
-    const kb = (bytes / 1024).toFixed(0);
-    console.log(`  ✓ ${w}x${h}  ${String(kb).padStart(5)} KB  ${outPath}`);
+  let count = 0;
+  for (const themeName of selectedThemes) {
+    for (const position of selectedPositions) {
+      for (const mirror of mirrors) {
+        for (const name of selected) {
+          const { outPath, bytes, w, h } = await render({ name, themeName, position, mirror, opts });
+          const kb = (bytes / 1024).toFixed(0);
+          console.log(`  ✓ ${w}x${h}  ${String(kb).padStart(5)} KB  ${outPath}`);
+          count++;
+        }
+      }
+    }
   }
-  console.log(`\n${selected.length} background${selected.length === 1 ? "" : "s"} in ${opts.outDir}`);
+  console.log(`\n${count} background${count === 1 ? "" : "s"} in ${opts.outDir}`);
 }
 
 main().catch((err) => {

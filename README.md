@@ -52,8 +52,9 @@ Tokens in [`brand/tokens.json`](brand/tokens.json). Full table and contrast
 matrix in [`brand/README.md`](brand/README.md).
 
 > [!WARNING]
-> Teal on white is **1.68:1** and fails contrast. It is a dark-surface colour.
-> On light grounds use `gray.900` for text.
+> Teal on white is **1.68:1** and fails contrast. `primary` is a dark-surface
+> colour. On light grounds use `gray.900` for text and `primaryInk` (`#34786f`,
+> 5.17:1 on white) for anything teal that has to be read.
 
 <br>
 

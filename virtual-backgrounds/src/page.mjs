@@ -1,9 +1,4 @@
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
-
-const HERE = dirname(fileURLToPath(import.meta.url));
-const BRAND = join(HERE, "..", "..", "brand");
+import { wordmark } from "../../lib/chrome.mjs";
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
@@ -15,13 +10,13 @@ export const positions = {
   "top-left": "left:120px;top:96px",
 };
 
-export function loadWordmark() {
-  return readFileSync(join(BRAND, "logo", "wordmark-on-dark.svg"), "utf8");
-}
-
 /**
  * Overlay showing where the person sits and where each platform paints its own
  * chrome, so a design can be checked without joining a real call.
+ *
+ * Guides sit outside the mirror, in file coordinates: platform chrome is drawn
+ * on top of the tile and is never mirrored, so these mark where it lands on the
+ * frame as it is transmitted.
  */
 const GUIDES = `
 .guide{position:absolute;border:2px dashed rgba(255,80,80,.85);
@@ -39,22 +34,26 @@ const GUIDE_HTML = `
 <div class="guide controls"><span>call controls</span></div>
 `;
 
-export function buildPage({ design, logoWidth, position, guides }) {
+export function buildPage({ design, theme, logoWidth, position, guides, mirror }) {
   const place = positions[position];
+  const { css, layers } = design.build(theme);
   return `<!doctype html>
 <html><head><meta charset="utf-8"><style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#000}
-.stage{position:relative;width:${WIDTH}px;height:${HEIGHT}px;overflow:hidden;background:#18181b}
+html,body{margin:0;padding:0;background:${theme.page}}
+.stage{position:relative;width:${WIDTH}px;height:${HEIGHT}px;overflow:hidden;background:${theme.base}}
+.sky{position:absolute;inset:0${mirror ? ";transform:scaleX(-1)" : ""}}
 .logo{position:absolute;${place};width:${logoWidth}px;line-height:0;
-  filter:drop-shadow(0 2px 18px rgba(0,0,0,.55))}
+  filter:${theme.logoShadow}}
 .logo svg{width:100%;height:auto;display:block}
-${design.css}
+${css}
 ${guides ? GUIDES : ""}
 </style></head>
 <body><div class="stage">
-${design.layers}
-<div class="logo">${loadWordmark()}</div>
+<div class="sky">
+${layers}
+<div class="logo">${wordmark(theme.wordmark)}</div>
+</div>
 ${guides ? GUIDE_HTML : ""}
 </div></body></html>`;
 }

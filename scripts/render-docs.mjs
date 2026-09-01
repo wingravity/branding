@@ -31,6 +31,7 @@ const SWATCHES = [
     { name: "primary", hex: C.primary },
     { name: "primaryLight", hex: C.primaryLight },
     { name: "primaryDeep", hex: C.primaryDeep },
+    { name: "primaryInk", hex: C.primaryInk },
     { name: "yellow", hex: C.yellow },
   ],
   [

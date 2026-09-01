@@ -1,11 +1,15 @@
 {
   "name": "@wingravity/virtual-backgrounds",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Brand virtual backgrounds for Google Meet, Zoom and Microsoft Teams",
   "type": "module",
   "scripts": {
     "generate": "node generate.mjs",
+    "generate:dark": "node generate.mjs --theme dark",
+    "generate:light": "node generate.mjs --theme light",
+    "generate:mirrored": "node generate.mjs --mirror on",
+    "generate:all": "node generate.mjs --mirror both",
     "generate:4k": "node generate.mjs --scale 2",
     "guides": "node generate.mjs --guides",
     "list": "node generate.mjs --list"

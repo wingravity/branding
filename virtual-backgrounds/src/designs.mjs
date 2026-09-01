@@ -4,30 +4,13 @@
  * Every design is authored in a fixed 1920x1080 coordinate space; higher
  * resolutions come from Chrome's device scale factor, not from different CSS.
  *
- * A design returns { css, layers } where `layers` is HTML painted behind the
- * logo. Keep the centre of the frame quiet: that is where the person sits.
+ * A design is `{ description, build(theme) }`, where `build` returns
+ * `{ css, layers }`: `layers` is HTML painted behind the logo, and `css` styles
+ * it. Colour comes only from the theme passed in — see `themes.mjs` — so one
+ * composition renders on charcoal and on paper without branching.
+ *
+ * Keep the centre of the frame quiet: that is where the person sits.
  */
-
-import { tokens } from "../../lib/chrome.mjs";
-
-const C = tokens().colors;
-
-const T = {
-  primary: C.primary,
-  ink900: C.gray["900"],
-  ink800: C.gray["800"],
-  ink700: C.gray["700"],
-};
-
-/** `#rrggbb` + alpha -> `rgba(...)`, so designs never restate a brand hex. */
-function rgba(hex, alpha) {
-  const h = hex.replace("#", "");
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-/** The brand teal at a given alpha — by far the most common colour here. */
-const A = (alpha) => rgba(C.primary, alpha);
 
 /** Deterministic PRNG so a given design always renders identically. */
 function rng(seed) {
@@ -42,9 +25,9 @@ function rng(seed) {
 
 /**
  * Stars. The central subject area is dimmed rather than emptied — cutting a
- * hole there leaves a visible column once the frame is this dark.
+ * hole there leaves a visible column once the frame is this quiet.
  */
-function starfield({ seed, count, dimCentre = true }) {
+function starfield({ theme: P, seed, count, dimCentre = true }) {
   const rand = rng(seed);
   const stars = [];
   while (stars.length < count) {
@@ -53,12 +36,12 @@ function starfield({ seed, count, dimCentre = true }) {
     const central = dimCentre && x > 30 && x < 70;
     const r = rand();
     const size = r > 0.95 ? 3 : r > 0.72 ? 2 : 1;
-    let opacity = 0.3 + rand() * 0.55;
+    let opacity = (0.3 + rand() * 0.55) * P.starScale;
     if (central) opacity *= 0.4;
     const teal = rand() > 0.86;
     stars.push(
       `<i style="left:${x.toFixed(3)}%;top:${y.toFixed(3)}%;width:${size}px;height:${size}px;` +
-        `opacity:${opacity.toFixed(3)};background:${teal ? T.primary : "#fff"}"></i>`
+        `opacity:${opacity.toFixed(3)};background:${teal ? P.starAccent : P.star}"></i>`
     );
   }
   return `<div class="stars">${stars.join("")}</div>`;
@@ -70,120 +53,83 @@ const STAR_CSS = `
 `;
 
 /** Subtle film grain — kills gradient banding on projector-grade compression. */
-const GRAIN = `
-.grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;
+const grain = (P) => `
+.grain{position:absolute;inset:0;opacity:${P.grainOpacity};mix-blend-mode:${P.grainBlend};
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 `;
 
-const VIGNETTE = `
+const vignette = (P) => `
 .vignette{position:absolute;inset:0;
-  background:radial-gradient(120% 95% at 50% 45%,transparent 40%,rgba(0,0,0,.55) 100%)}
+  background:radial-gradient(120% 95% at 50% 45%,transparent 40%,${P.shade(0.55)} 100%)}
 `;
 
 export const designs = {
-  /** Deep charcoal with a slow teal aurora bleeding in from the top-left. */
+  /** A slow teal aurora bleeding in from the top-left corner. */
   aurora: {
-    description: "Deep charcoal with a soft teal aurora. The quietest option — safe anywhere.",
-    css: `
-${GRAIN}${VIGNETTE}
-.stage{background:
-  radial-gradient(115% 85% at 10% 4%, ${A(.20)}, transparent 55%),
-  radial-gradient(85% 75% at 92% 98%, ${A(.10)}, transparent 60%),
-  radial-gradient(60% 60% at 50% 40%, rgba(54,58,69,.55), transparent 70%),
-  linear-gradient(158deg,#1e2025 0%, ${T.ink900} 48%, #0e0e10 100%)}
+    description: "A soft teal aurora bleeding in from one corner. The quietest option — safe anywhere.",
+    build: (P) => ({
+      css: `
+${grain(P)}${vignette(P)}
+.sky{background:
+  radial-gradient(115% 85% at 10% 4%, ${P.glow(0.2)}, transparent 55%),
+  radial-gradient(85% 75% at 92% 98%, ${P.glow(0.1)}, transparent 60%),
+  radial-gradient(60% 60% at 50% 40%, ${P.lift(0.55)}, transparent 70%),
+  linear-gradient(158deg,${P.raised} 0%, ${P.base} 48%, ${P.deep} 100%)}
 .veil{position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.35) 100%)}
+  background:linear-gradient(180deg,transparent 55%,${P.shade(0.35)} 100%)}
 `,
-    layers: `<div class="veil"></div><div class="vignette"></div><div class="grain"></div>`,
+      layers: `<div class="veil"></div><div class="vignette"></div><div class="grain"></div>`,
+    }),
   },
 
   /** Faint orbital arcs sweeping out of the left edge, one teal body in transit. */
   orbit: {
     description: "Faint orbital arcs with a single teal body in transit. Space, but restrained.",
-    css: `
-${GRAIN}${VIGNETTE}
-.stage{background:
-  radial-gradient(90% 80% at 8% 50%, ${A(.13)}, transparent 58%),
-  linear-gradient(150deg,#1c1d22 0%, ${T.ink900} 55%, #101012 100%)}
+    build: (P) => ({
+      css: `
+${grain(P)}${vignette(P)}
+.sky{background:
+  radial-gradient(90% 80% at 8% 50%, ${P.glow(0.13)}, transparent 58%),
+  linear-gradient(150deg,${P.raisedSoft} 0%, ${P.base} 55%, ${P.deep} 100%)}
 .ring{position:absolute;left:-560px;top:50%;border-radius:50%;
-  border:1px solid ${A(.13)};transform:translateY(-50%)}
+  border:1px solid ${P.line(0.13)};transform:translateY(-50%)}
 .ring.r1{width:1500px;height:1500px}
-.ring.r2{width:2200px;height:2200px;border-color:${A(.09)}}
-.ring.r3{width:2950px;height:2950px;border-color:${A(.055)}}
-.ring.r4{width:3750px;height:3750px;border-color:${A(.035)}}
-.body{position:absolute;border-radius:50%;background:${T.primary}}
+.ring.r2{width:2200px;height:2200px;border-color:${P.line(0.09)}}
+.ring.r3{width:2950px;height:2950px;border-color:${P.line(0.055)}}
+.ring.r4{width:3750px;height:3750px;border-color:${P.line(0.035)}}
+.body{position:absolute;border-radius:50%;background:${P.accentLine}}
 .body.b1{left:186px;top:236px;width:14px;height:14px;
-  box-shadow:0 0 26px 6px ${A(.55)},0 0 70px 18px ${A(.18)}}
+  box-shadow:0 0 26px 6px ${P.glow(0.55)},0 0 70px 18px ${P.glow(0.18)}}
 .body.b2{left:96px;top:806px;width:7px;height:7px;opacity:.6;
-  box-shadow:0 0 16px 4px ${A(.35)}}
+  box-shadow:0 0 16px 4px ${P.glow(0.35)}}
 `,
-    layers:
-      `<div class="ring r1"></div><div class="ring r2"></div>` +
-      `<div class="ring r3"></div><div class="ring r4"></div>` +
-      `<div class="body b1"></div><div class="body b2"></div>` +
-      `<div class="vignette"></div><div class="grain"></div>`,
+      layers:
+        `<div class="ring r1"></div><div class="ring r2"></div>` +
+        `<div class="ring r3"></div><div class="ring r4"></div>` +
+        `<div class="body b1"></div><div class="body b2"></div>` +
+        `<div class="vignette"></div><div class="grain"></div>`,
+    }),
   },
 
-  /** Near-black sky, a drift of stars, a teal nebula wash off to one side. */
+  /** A drift of stars with a teal nebula wash off to one side. */
   starfield: {
-    description: "Near-black sky with a drift of stars and a faint teal nebula.",
-    css: `
-${STAR_CSS}${GRAIN}${VIGNETTE}
-.stage{background:
-  radial-gradient(70% 60% at 84% 16%, ${A(.15)}, transparent 62%),
-  radial-gradient(60% 55% at 14% 88%, ${A(.07)}, transparent 65%),
-  linear-gradient(165deg,#16171b 0%, #101013 60%, #0a0a0c 100%)}
+    description: "A quiet drift of stars with a faint teal nebula off to one side.",
+    build: (P) => ({
+      css: `
+${STAR_CSS}${grain(P)}${vignette(P)}
+.sky{background:
+  radial-gradient(70% 60% at 84% 16%, ${P.glow(0.15)}, transparent 62%),
+  radial-gradient(60% 55% at 14% 88%, ${P.glow(0.07)}, transparent 65%),
+  linear-gradient(165deg,${P.sunken} 0%, ${P.deep} 60%, ${P.deeper} 100%)}
 `,
-    layers: starfield({ seed: 20260824, count: 300 }) +
-      `<div class="vignette"></div><div class="grain"></div>`,
+      layers:
+        starfield({ theme: P, seed: 20260824, count: 300 }) +
+        `<div class="vignette"></div><div class="grain"></div>`,
+    }),
   },
 
-  /** Planet limb across the bottom edge with a teal rim light. */
-  horizon: {
-    description: "A planet limb across the bottom edge, rim-lit in teal. The most cinematic of the set.",
-    css: `
-${STAR_CSS}${GRAIN}
-.stage{background:
-  radial-gradient(80% 70% at 50% 6%, ${A(.10)}, transparent 60%),
-  linear-gradient(180deg,#101115 0%, #0b0b0e 55%, #08080a 100%)}
-.planet{position:absolute;left:50%;top:960px;width:4600px;height:4600px;
-  margin-left:-2300px;border-radius:50%;background:#0a0a0c;
-  box-shadow:0 -1px 0 1px ${A(.42)},
-             0 -22px 90px 8px ${A(.22)},
-             0 -70px 220px 30px ${A(.10)}}
-.limb{position:absolute;left:0;right:0;top:846px;height:180px;
-  background:radial-gradient(60% 100% at 50% 100%, ${A(.20)}, transparent 72%)}
-.topfade{position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.42) 0%,transparent 34%)}
-`,
-    layers:
-      starfield({ seed: 991177, count: 240 }) +
-      `<div class="limb"></div><div class="planet"></div>` +
-      `<div class="topfade"></div><div class="grain"></div>`,
-  },
 
-  /** A dark body eclipsing a teal corona, held off to the right. */
-  eclipse: {
-    description: "A dark body against a teal corona, held to one side. Bold but still quiet in the centre.",
-    css: `
-${STAR_CSS}${GRAIN}${VIGNETTE}
-.stage{background:linear-gradient(160deg,#141519 0%, #0d0d10 60%, #08080a 100%)}
-.corona{position:absolute;left:1274px;top:176px;width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(closest-side, ${A(.85)}, ${A(.20)} 60%, transparent 76%);
-  filter:blur(3px)}
-.disc{position:absolute;left:1300px;top:202px;width:548px;height:548px;border-radius:50%;
-  background:radial-gradient(120% 120% at 26% 22%, #15161a 0%, #0a0a0c 60%, #060607 100%);
-  box-shadow:inset 0 0 90px 12px rgba(0,0,0,.9),
-             0 0 0 1px ${A(.30)},
-             0 0 60px 6px ${A(.16)}}
-.glowfloor{position:absolute;inset:0;
-  background:radial-gradient(80% 58% at 82% 30%, ${A(.15)}, transparent 62%)}
-`,
-    layers:
-      starfield({ seed: 5150, count: 220 }) +
-      `<div class="glowfloor"></div><div class="corona"></div><div class="disc"></div>` +
-      `<div class="vignette"></div><div class="grain"></div>`,
-  },
+
 };
 
 export const designNames = Object.keys(designs);
