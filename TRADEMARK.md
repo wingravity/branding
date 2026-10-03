@@ -1,7 +1,7 @@
 # Trademark policy
 
-**Wingravity**™ and the Wingravity wordmark are trademarks of Wingravity.
-This policy explains what may and may not be done with them.
+**Wingravity**® is a registered EU trade mark. This policy explains what may
+and may not be done with the name and the mark.
 
 ## Scope
 
@@ -49,21 +49,20 @@ Wingravity.
   "Wingravitys" is not).
 - Use the name as an adjective before a noun where it reads naturally:
   "the Wingravity brand system", not "a Wingravity".
-- In marketing material, mark the first prominent use: Wingravity™. Body copy
-  after that needs no symbol. Do not use ®, because the mark is not currently
-  registered.
+- In marketing material, mark the first prominent use: Wingravity®. Body copy
+  after that needs no symbol.
 
 ## Notices
 
 Short form, for page footers and README endings:
 
-> Wingravity™ and the Wingravity wordmark are trademarks of Wingravity.
+> Wingravity® is a registered trade mark.
 > Not covered by any code license in this repository.
 
 Long form, for legal pages and printed collateral:
 
-> Wingravity™ and the Wingravity wordmark are trademarks of Wingravity. All
-> other trademarks are the property of their respective owners.
+> Wingravity® is a registered trade mark.
+> All other trademarks are the property of their respective owners.
 
 ## Questions
 

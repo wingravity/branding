@@ -29,7 +29,7 @@ still be checked.
 | Field | Required | Notes |
 | :--- | :--- | :--- |
 | `name`, `title`, `email`, `website` | yes | |
-| `nameSuffix` | no | Appended to the name in bold, e.g. `" - The Technology Interpreter™"`. |
+| `nameSuffix` | no | Appended to the name in bold, e.g. `" - Founder"`. |
 | `tagline` | no | One line under the title. |
 | `phone`, `location` | no | Their rows are left out when empty. |
 | `photo` | no | Path to a source image, relative to this package. Cropped to a circle. |

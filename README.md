@@ -127,8 +127,8 @@ Edit the skill here, not the installed copy; the symlink keeps them the same.
 - Name the awkward part: fixed scope, named price, no handoffs to juniors.
 - Sentence case in headings and UI.
 - "Wingravity" is one word, capital W. Lowercase only inside the wordmark.
-- Mark the first prominent use in marketing as Wingravity&trade;. Never &reg;, because
-  the mark is not registered. Rules in [`TRADEMARK.md`](TRADEMARK.md).
+- Mark the first prominent use in marketing as Wingravity&reg;. It is a
+  registered EU trade mark. Rules in [`TRADEMARK.md`](TRADEMARK.md).
 - Avoid: revolutionary, cutting-edge, world-class, synergy, unlock, supercharge.
 
 <br>
@@ -178,9 +178,9 @@ Edit the skill here, not the installed copy; the symlink keeps them the same.
 <div align="center">
 <sub>
 
-Typefaces licensed under the SIL Open Font License. Wingravity&trade; and the
-Wingravity wordmark are trademarks, not covered by any code license in this
-repository. See <a href="TRADEMARK.md">TRADEMARK.md</a>.
+Typefaces licensed under the SIL Open Font License. Wingravity&reg; is a
+registered trade mark, not covered by any code license in
+this repository. See <a href="TRADEMARK.md">TRADEMARK.md</a>.
 
 </sub>
 </div>

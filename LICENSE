@@ -29,8 +29,8 @@ this repository. It does NOT cover:
 
 1. Trademarks. The name "Wingravity", the Wingravity wordmark, the Wingravity
    symbol and app icon (every file under packages/brand/logo/, and any image
-   rendered from them) are trademarks of Wingravity. This license grants no
-   right to use them. See TRADEMARK.md.
+   rendered from them) are trademarks of Wingravity; Wingravity is a
+   registered EU trade mark. This license grants no right to use them. See TRADEMARK.md.
 
 2. Typefaces. Kanit and Space Mono in packages/brand/fonts/ are third-party
    works under the SIL Open Font License 1.1. Their own license files apply.

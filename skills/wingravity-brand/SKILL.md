@@ -89,8 +89,8 @@ be read. Print, letters and email bodies are light grounds.
 - Sentence case in headings and UI.
 - "Wingravity" is one word with a capital W. It is lowercase only inside the
   wordmark artwork.
-- Mark the first prominent use in marketing as Wingravity™. Never use ®,
-  because the mark is not registered.
+- Mark the first prominent use in marketing as Wingravity®. It is a
+  registered EU trade mark.
 - Banned words: revolutionary, cutting-edge, world-class, synergy, unlock,
   supercharge.
 

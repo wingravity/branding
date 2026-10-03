@@ -554,7 +554,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
     <li><strong>Name the awkward part:</strong> fixed scope, named price, no handoffs to juniors.</li>
     <li><strong>Sentence case</strong> in headings and UI.</li>
     <li>"Wingravity" is one word, capital W. Lowercase only inside the wordmark.</li>
-    <li>Mark the first prominent use in marketing as Wingravity™. Never ®, because the mark is not registered.</li>
+    <li>Mark the first prominent use in marketing as Wingravity®. It is a registered EU trade mark.</li>
   </ul>
   <div class="voice">
     <div class="say"><div class="k">Say</div>
@@ -596,7 +596,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
 <section id="trademark"><div class="wrap">
   <div class="eyebrow">08 · Trademark</div>
   <h2>The name and the mark are reserved</h2>
-  <p>Wingravity™ and the Wingravity wordmark and symbol are trademarks of Wingravity. The code and tokens
+  <p>Wingravity® is a registered EU trade mark. The code and tokens
   in this repository are licensed separately; that licence grants no trademark rights.</p>
   <div class="grid2">
     <div class="card"><div class="k">Fine without asking</div>
@@ -612,7 +612,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
 </main>
 
 <footer><div class="wrap">
-  <span>Wingravity™ and the Wingravity wordmark are trademarks of Wingravity.</span>
+  <span>Wingravity® is a registered trade mark.</span>
   <span>Kanit and Space Mono: SIL Open Font License.</span>
 </div></footer>
 

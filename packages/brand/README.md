@@ -124,7 +124,7 @@ lockup.
 - The app icon bleeds, so it loses its edges in a circular crop. For circles,
   use the avatar from `@wingravity/social`: the wordmark, circle-safe.
 
-The wordmark is a trademark, not an open asset. Third-party use, modification
+The wordmark is a registered EU trade mark. Third-party use, modification
 and naming rules are in [`TRADEMARK.md`](../../TRADEMARK.md).
 
 ## Fonts
