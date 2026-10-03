@@ -11,7 +11,7 @@ npm run generate:guidelines   # from this folder or the repo root
 | [`render-docs.mjs`](render-docs.mjs) | `docs/assets/palette.png`, `type.png` | README colour and type strips |
 | [`guidelines.mjs`](guidelines.mjs) | `docs/assets/logo.png` | Wordmark, symbol, app icon, both cuts, clear space drawn |
 | | `docs/assets/misuse.png` | Nine logo mistakes, actually rendered |
-| | `docs/index.html` | The full guidelines, one self-contained file. Served by GitHub Pages at https://wingravity.github.io/branding/ |
+| | `docs/index.html` | The full guidelines, one self-contained file. Served by GitHub Pages at https://branding.wingravity.com/ |
 
 ## The guidelines page
 
