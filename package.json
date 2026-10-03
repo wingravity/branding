@@ -1,0 +1,20 @@
+{
+  "name": "wingravity-branding",
+  "private": true,
+  "description": "Wingravity brand system: tokens, logo, and the generators that use them",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "generate:tokens-css": "npm run generate:tokens-css -w @wingravity/brand",
+    "generate:guidelines": "npm run generate:guidelines -w @wingravity/guidelines",
+    "generate:backgrounds": "npm run generate:backgrounds -w @wingravity/virtual-backgrounds",
+    "generate:social-images": "npm run generate:social-images -w @wingravity/social",
+    "generate:signatures": "npm run generate:signatures -w @wingravity/email-signature",
+    "generate:all": "npm run generate:tokens-css && npm run generate:guidelines && npm run generate:backgrounds && npm run generate:social-images && npm run generate:signatures"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

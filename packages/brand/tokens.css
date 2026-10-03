@@ -1,0 +1,20 @@
+/* Generated from tokens.json by generate-tokens-css.mjs. Do not edit. */
+:root {
+  --wg-primary: #64dbca;
+  --wg-primary-light: #86ecdc;
+  --wg-primary-deep: #4bc7b4;
+  --wg-primary-ink: #34786f;
+  --wg-logo-accent: #66dbc9;
+  --wg-white: #ffffff;
+  --wg-black: #000000;
+  --wg-yellow: #fabb05;
+  --wg-gray-200: #e9e9e9;
+  --wg-gray-300: #d8d8d8;
+  --wg-gray-400: #9d9fa4;
+  --wg-gray-600: #585966;
+  --wg-gray-700: #363a45;
+  --wg-gray-800: #27282f;
+  --wg-gray-900: #18181b;
+  --wg-font-sans: "Kanit", system-ui, sans-serif;
+  --wg-font-mono: "Space Mono", ui-monospace, monospace;
+}

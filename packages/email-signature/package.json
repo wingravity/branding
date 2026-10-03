@@ -1,0 +1,16 @@
+{
+  "name": "@wingravity/email-signature",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gmail-safe HTML email signature built from the brand tokens",
+  "type": "module",
+  "scripts": {
+    "generate:signatures": "node generate-signatures.mjs"
+  },
+  "dependencies": {
+    "@wingravity/render": "*"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
