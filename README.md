@@ -153,28 +153,6 @@ Edit the skill here, not the installed copy; the symlink keeps them the same.
 
 ---
 
-## Roadmap
-
-- [x] `TRADEMARK.md`. Name and logo reserved.
-- [x] `LICENSE` with a trademark carve-out.
-- [x] **Standalone mark.** The `wg` symbol, cut from the wordmark's own paths,
-      plus a vector app icon replacing the PNG-in-SVG favicon.
-- [x] `brand/` as a package (`@wingravity/brand`), with `tokens.css`.
-- [x] Social covers, posts and highlights rebuilt from the 2021 artwork, with
-      live type, at each platform's size.
-- [x] Logo rebuilt from the 2021 master; the g's tail is whole again.
-- [x] Email signature.
-- [x] Logo misuse examples, shown rather than described.
-- [ ] Publish `@wingravity/brand` and switch the website to consume it, so this
-      repo becomes the upstream source.
-- [ ] Replace the website's logo (its g has a chopped tail) and favicon set
-      with the files from `packages/brand/logo/`.
-- [ ] Illustration and photography direction.
-
-<br>
-
----
-
 <div align="center">
 <sub>
 
