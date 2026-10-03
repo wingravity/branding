@@ -306,12 +306,7 @@ nav{display:flex;gap:18px;overflow-x:auto;white-space:nowrap;font-size:13px}
 nav a{border:0;color:${G["400"]}}
 nav a:hover{color:${C.white}}
 .print-mark{display:none}
-.hero{padding:120px 0 96px;border-bottom:1px solid ${G["700"]};position:relative;overflow:hidden}
-.hero .orbit{position:absolute;right:-220px;top:-160px;width:720px;height:720px;border-radius:50%;
-  border:1px solid ${G["700"]}}
-.hero .orbit::after{content:"";position:absolute;inset:110px;border-radius:50%;border:1px solid ${G["800"]}}
-.hero .body{position:absolute;right:236px;top:330px;width:10px;height:10px;border-radius:50%;
-  background:${C.primary};box-shadow:0 0 24px ${C.primary}}
+.hero{padding:120px 0 96px;border-bottom:1px solid ${G["700"]}}
 .eyebrow{font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:${C.primary}}
 h1{font-weight:300;font-size:64px;line-height:1.05;letter-spacing:-.02em;margin:20px 0 22px;max-width:14ch}
 .lede{color:${G["400"]};font-size:20px;max-width:52ch}
@@ -385,7 +380,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   .grid2,.grid3,.voice,.spec{grid-template-columns:1fr}
   .row{grid-template-columns:1fr;gap:4px}
   .stage{flex-direction:column;gap:36px}
-  .hero .orbit,.hero .body{display:none}
   table{display:block;overflow-x:auto}
 }
 
@@ -394,7 +388,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   :root{color-scheme:light}
   @page{size:A4;margin:16mm 14mm}
   body{background:${C.white};color:${G["900"]};font-size:11pt}
-  header.top,.hero .orbit,.hero .body{display:none}
+  header.top{display:none}
   .print-mark{display:block;width:150px;margin-bottom:28px}
   .grid3{grid-template-columns:repeat(3,1fr)}
   .grid2,.voice,.spec{grid-template-columns:1fr 1fr}
@@ -426,7 +420,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   <nav>${NAV.map(([id, n]) => `<a href="#${id}">${n}</a>`).join("")}</nav>
 </div></header>
 
-<div class="hero" id="overview"><div class="orbit"></div><div class="body"></div><div class="wrap">
+<div class="hero" id="overview"><div class="wrap">
   <div class="print-mark">${WM.light}</div>
   <div class="eyebrow">Brand guidelines</div>
   <h1>Dark, technical, one accent colour.</h1>
@@ -441,8 +435,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
       <p>Lines, dots, one word. Never a large fill.</p></div>
     <div class="card"><div class="k">Type</div><div class="v">Kanit 300</div>
       <p>Emphasis comes from size and order. Space Mono labels things.</p></div>
-    <div class="card"><div class="k">Motifs</div><div class="v">Orbits and horizons</div>
-      <p>Kept subtle, in the background.</p></div>
+    <div class="card"><div class="k">Key visual</div><div class="v">The collage, as supplied</div>
+      <p>The one illustration. Never redrawn or added to.</p></div>
     <div class="card"><div class="k">Imagery</div><div class="v">Real product</div>
       <p>Screenshots of shipped work over abstract art.</p></div>
     <div class="card"><div class="k">Avoid</div><div class="v">Off-brand looks</div>
@@ -571,8 +565,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   <div class="grid2">
     <div class="card"><div class="k">Use</div><div class="v">Screenshots of shipped work</div>
       <p>Real UI, in its real state, on a charcoal ground. Crop tight; don't fake devices around it.</p></div>
-    <div class="card"><div class="k">Use</div><div class="v">Orbits and horizons</div>
-      <p>Thin arcs in <code>gray.700</code>, one small teal body, a faint horizon glow. One motif per surface.</p></div>
     <div class="card"><div class="k">Use</div><div class="v">People, when they are ours</div>
       <p>The team and clients, photographed plainly. Never stock.</p></div>
     <div class="card"><div class="k">Key visual</div><div class="v">The collage, as supplied</div>

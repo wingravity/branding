@@ -35,7 +35,6 @@ Dark, technical, one accent colour.
 | **Ground** | Charcoal, `#18181b` to `#27282f`. |
 | **Accent** | Teal, sparingly. Never a large fill. |
 | **Type** | Kanit 300 for body. Emphasis comes from size and order. |
-| **Motifs** | Orbits and horizons, kept subtle, in the background. |
 | **Imagery** | Real product screenshots over abstract art. |
 | **Key visual** | The moon, astronaut and laptop collage on the social covers. The one illustration; use it as supplied. |
 

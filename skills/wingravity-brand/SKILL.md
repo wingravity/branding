@@ -18,7 +18,6 @@ Dark, technical, one accent colour.
 - **Ground:** charcoal `#18181b` to `#27282f`. Not black.
 - **Accent:** teal, sparingly. Never a large fill.
 - **Type:** Kanit 300 for body. Emphasis comes from size and order.
-- **Motifs:** orbits and horizons, kept subtle, in the background.
 - **Imagery:** real product screenshots over abstract art.
 - **Key visual:** the moon, astronaut and laptop collage on the social covers,
   with the headline "Innovation from the ground up." and "up." lifted in teal.
