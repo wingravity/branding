@@ -5,22 +5,23 @@
  * Renders each design to PNG through the Chrome already installed on this
  * machine — no npm dependencies, nothing to download.
  *
- *   node generate.mjs                        # every design, both themes
- *   node generate.mjs --design horizon       # just one
- *   node generate.mjs --theme light          # just the light ground
- *   node generate.mjs --mirror on            # pre-flipped for your self-view
- *   node generate.mjs --scale 2              # 3840x2160
- *   node generate.mjs --position top-left    # move the wordmark
- *   node generate.mjs --guides               # overlay safe-zone guides
+ *   node generate-backgrounds.mjs                        # every design, both themes
+ *   node generate-backgrounds.mjs --design horizon       # just one
+ *   node generate-backgrounds.mjs --theme light          # just the light ground
+ *   node generate-backgrounds.mjs --mirror on            # pre-flipped for your self-view
+ *   node generate-backgrounds.mjs --scale 2              # 3840x2160
+ *   node generate-backgrounds.mjs --position top-left    # move the wordmark
+ *   node generate-backgrounds.mjs --guides               # overlay safe-zone guides
  */
 
-import { mkdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { screenshot } from "../lib/chrome.mjs";
+import { screenshot } from "@wingravity/render";
 import { designs, designNames } from "./src/designs.mjs";
 import { themes, themeNames } from "./src/themes.mjs";
 import { buildPage, positions, WIDTH, HEIGHT } from "./src/page.mjs";
+import { SOURCE_DIR } from "../social/src/sources.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -88,7 +89,7 @@ function parseArgs(argv) {
 const HELP = `
 Wingravity virtual background generator
 
-  node generate.mjs [options]
+  node generate-backgrounds.mjs [options]
 
   -d, --design <name>     Render one design (default: all)
   -t, --theme <name>      ${themeNames.join(" | ")} | both (default: both)
@@ -99,7 +100,7 @@ Wingravity virtual background generator
   -s, --scale <1|2>       1 = 1920x1080, 2 = 3840x2160 (default: 1)
   -p, --position <where>  Wordmark corner: ${Object.keys(positions).join(" | ")}
                           | both | all | a comma-separated list
-                          (default: both — bottom-right and top-right, the two
+                          (default: both, meaning bottom-right and top-right, the two
                           that clear the name chip and the control bar)
       --logo-width <px>   Wordmark width in the 1920x1080 space (default: 360)
   -o, --out <dir>         Output directory (default: ./out)
@@ -137,7 +138,7 @@ async function main() {
 
   if (opts.help) return console.log(HELP);
   if (opts.list) {
-    for (const n of designNames) console.log(`  ${n.padEnd(11)} ${designs[n].description}`);
+    for (const n of designNames) console.log(`  ${n.padEnd(20)} ${designs[n].description}`);
     return;
   }
   const selectedPositions = resolvePositions(opts.position);
@@ -157,6 +158,14 @@ async function main() {
     }
   }
   const selectedThemes = opts.theme === "both" ? themeNames : [opts.theme];
+
+  // Key visuals need the 2021 rasters, which are kept out of git.
+  const runnable = selected.filter((name) => {
+    const file = designs[name].artwork;
+    if (!file || existsSync(join(SOURCE_DIR, file))) return true;
+    console.warn(`  - skipping ${name}: sources/design/${file} is not present (see ../social/src/sources.mjs)`);
+    return false;
+  });
   const mirrors = VARIANTS[opts.mirror];
 
   mkdirSync(opts.outDir, { recursive: true });
@@ -165,7 +174,14 @@ async function main() {
   for (const themeName of selectedThemes) {
     for (const position of selectedPositions) {
       for (const mirror of mirrors) {
-        for (const name of selected) {
+        for (const name of runnable) {
+          const only = designs[name].themes;
+          if (only && !only.includes(themeName)) {
+            if (position === selectedPositions[0] && mirror === mirrors[0]) {
+              console.log(`  - ${name} has no ${themeName} theme; skipped`);
+            }
+            continue;
+          }
           const { outPath, bytes, w, h } = await render({ name, themeName, position, mirror, opts });
           const kb = (bytes / 1024).toFixed(0);
           console.log(`  ✓ ${w}x${h}  ${String(kb).padStart(5)} KB  ${outPath}`);

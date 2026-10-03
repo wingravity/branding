@@ -1,0 +1,4 @@
+out/
+.tmp/
+sources/
+data/*.local.json

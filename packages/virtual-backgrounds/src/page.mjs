@@ -1,4 +1,4 @@
-import { wordmark } from "../../lib/chrome.mjs";
+import { wordmark } from "@wingravity/render";
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;

@@ -15,7 +15,7 @@
  * themes follow the site theme rather than drifting from it.
  */
 
-import { tokens } from "../../lib/chrome.mjs";
+import { tokens } from "@wingravity/render";
 
 const C = tokens().colors;
 

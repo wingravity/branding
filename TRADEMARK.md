@@ -8,7 +8,7 @@ This policy explains what may and may not be done with them.
 | | |
 | :--- | :--- |
 | **The name** | "Wingravity", alone or in combination (Wingravity Labs, wingravity.com, @wingravity). |
-| **The wordmark** | The two-tone logotype in [`brand/logo/`](brand/logo/), in every cut and colourway. |
+| **The wordmark** | The two-tone logotype, the symbol cut from it, and the app icon, in [`brand/logo/`](packages/brand/logo/), in every cut and colourway. |
 | **Trade dress** | The dark-charcoal-with-single-teal treatment as applied by this brand system. |
 
 Not covered: the typefaces (Kanit and Space Mono are third-party, SIL OFL),
@@ -25,10 +25,10 @@ Wingravity.
 ## Permitted without asking
 
 - **Nominative reference.** Naming Wingravity in prose to refer to the company
-  or its products — reviews, comparisons, press, documentation, invoices.
+  or its products: reviews, comparisons, press, documentation, invoices.
 - **Unmodified wordmark** in an article, deck or "built with" listing, using the
-  files in [`brand/logo/`](brand/logo/) and following the rules in
-  [`brand/README.md`](brand/README.md#logo).
+  files in [`brand/logo/`](packages/brand/logo/) and following the rules in
+  [`brand/README.md`](packages/brand/README.md#logo).
 - **Linking** to wingravity.com or docs.wingravity.com.
 
 ## Not permitted without written permission
@@ -50,7 +50,7 @@ Wingravity.
 - Use the name as an adjective before a noun where it reads naturally:
   "the Wingravity brand system", not "a Wingravity".
 - In marketing material, mark the first prominent use: Wingravity™. Body copy
-  after that needs no symbol. Do not use ® — the mark is not currently
+  after that needs no symbol. Do not use ®, because the mark is not currently
   registered.
 
 ## Notices
@@ -67,4 +67,4 @@ Long form, for legal pages and printed collateral:
 
 ## Questions
 
-Anything not clearly permitted above: ask first — <daniel@wingravity.com>.
+Anything not clearly permitted above: ask first at <office@wingravity.com>.

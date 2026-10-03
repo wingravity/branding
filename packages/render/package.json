@@ -1,0 +1,10 @@
+{
+  "name": "@wingravity/render",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Headless-Chrome renderer shared by every generator in this repo",
+  "type": "module",
+  "exports": { ".": "./index.mjs" },
+  "dependencies": { "@wingravity/brand": "*" },
+  "engines": { "node": ">=18" }
+}

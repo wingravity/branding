@@ -1,0 +1,32 @@
+{
+  "name": "Firstname Lastname",
+  "nameSuffix": null,
+  "title": "Role at Wingravity",
+  "phone": "+40 000 000 000",
+  "email": "firstname@wingravity.com",
+  "photo": "sources/photos/firstname-lastname.jpeg",
+  "photoUrl": null,
+  "socials": [
+    {
+      "network": "facebook",
+      "url": "https://www.facebook.com/wingravity"
+    },
+    {
+      "network": "x",
+      "url": "https://x.com/wingravity"
+    },
+    {
+      "network": "linkedin",
+      "url": "https://www.linkedin.com/company/wingravity"
+    },
+    {
+      "network": "instagram",
+      "url": "https://www.instagram.com/wingravity/"
+    }
+  ],
+  "showWordmark": true,
+  "tagline": "Creating history, not repeating it.",
+  "website": "https://www.wingravity.com",
+  "location": "Iași, Romania",
+  "assetBaseUrl": "https://wingravity.com/brand/email"
+}

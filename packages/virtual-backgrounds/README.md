@@ -1,15 +1,21 @@
 # Wingravity virtual backgrounds
 
-Brand backgrounds for Google Meet, Zoom and Microsoft Teams. Three minimal
-designs carrying the wordmark and a subtle space motif, each on a charcoal or a
-paper ground, with the wordmark top or bottom.
+Brand backgrounds for Google Meet, Zoom and Microsoft Teams.
+- Three minimal designs carry the wordmark and a subtle space motif, on a
+  charcoal or a paper ground.
+- Three more carry the 2021 key visuals.
+
+**To use one, take it from [`dist/`](dist/).** It holds every design and theme
+with the wordmark bottom-right, plus a `-mirrored` copy of each (see
+[Mirroring](#mirroring)). That's 18 files, ready to upload.
 
 ```
-npm run generate          # 3 designs x 2 themes x 2 corners = 12, into ./out
+npm run generate:backgrounds   # rebuild dist/: every design, bottom-right, mirrored and not
+node generate-backgrounds.mjs  # ad-hoc renders into ./out (gitignored); see Options
 ```
 
-That's it. There are no dependencies to install, and rendering goes through the
-Chrome already on your machine.
+There are no dependencies to install, and rendering goes through the Chrome
+already on your machine.
 
 ## The designs
 
@@ -18,12 +24,21 @@ Chrome already on your machine.
 | `aurora`    | A soft teal aurora bleeding in from one corner. The quietest option, safe anywhere. |
 | `orbit`     | Faint orbital arcs with a single teal body in transit. Space, but restrained. |
 | `starfield` | A quiet drift of stars with a faint teal nebula off to one side. |
+| `keyvisual-astronaut` | The 2021 key visual, astronaut, laptop and moon, in the left third. Dark only. |
+| `keyvisual-telescope` | The same, with the phone and telescope. Dark only. |
+| `keyvisual-shuttle` | The same, with the shuttle and laptop. Dark only. |
 
-Run `npm run list` to see the same table in the terminal.
+The key visuals are the original 2021 rasters on their own flat `gray.800`
+ground, so they have no light theme; `--theme light` skips them with a note.
+The rasters are not in git. They render only when
+[`../social/sources/design/`](../social/src/sources.mjs) holds them, and are
+skipped with a warning otherwise.
+
+Run `npm run list:backgrounds` to see the same table in the terminal.
 
 ## Themes
 
-Each design renders on two grounds, and `npm run generate` produces both.
+Each design renders on two grounds, and `npm run generate:backgrounds` produces both.
 
 | Theme | Ground | Use it when |
 | ----- | ------ | ----------- |
@@ -34,7 +49,7 @@ The two are not the same design with the colours inverted. A light ground
 changes what the accent can do: `primary` (`#64dbca`) is a dark-surface colour
 and vanishes on paper, so the light theme washes with `primaryDeep` at a
 boosted alpha, draws every edge in a teal shaded toward ink, and paints stars in
-`gray.700`. Shade and grain are both held back there too — on a light ground
+`gray.700`. Shade and grain are both held back there too. On a light ground
 they mix gray into the teal and turn it sage.
 
 The light cut of the wordmark carries `primaryInk` (`#34786f`) rather than the
@@ -57,7 +72,7 @@ Choose by whose view matters:
 | default (`--mirror off`) | wordmark flipped, bottom-left | **wordmark correct, bottom-right** |
 | `--mirror on` | **wordmark correct, bottom-right** | wordmark flipped, bottom-left, under the name chip |
 
-There is no setting that satisfies both — the mirror is applied to your preview
+There is no setting that satisfies both. The mirror is applied to your preview
 only, not to what is transmitted. If the wordmark is there for the other
 participants, leave mirroring off. If it is there so your own tile looks right,
 turn it on and accept that the flipped mark lands near the name chip for
@@ -75,14 +90,14 @@ any other corner is named in the filename.
 
 | Corner | Clear of | Watch for |
 | :--- | :--- | :--- |
-| `bottom-right` (default) | the name chip, the control bar | nothing — the safe choice |
+| `bottom-right` (default) | the name chip, the control bar | nothing; the safe choice |
 | `top-right` | the name chip, the control bar | hover chrome: Meet's pin, Teams' `...` |
-| `bottom-left`, `top-left` | — | the name chip sits bottom-left on all three |
+| `bottom-left`, `top-left` | | the name chip sits bottom-left on all three |
 
 ## Options
 
 ```
-node generate.mjs [options]
+node generate-backgrounds.mjs [options]
 
   -d, --design <name>     Render one design (default: all)
   -t, --theme <name>      dark | light | both (default: both)
@@ -90,7 +105,7 @@ node generate.mjs [options]
   -s, --scale <1|2>       1 = 1920x1080, 2 = 3840x2160 (default: 1)
   -p, --position <where>  Wordmark corner: bottom-right | bottom-left
                           | top-right | top-left | both | all | a list
-                          (default: both — bottom-right and top-right)
+                          (default: both, meaning bottom-right and top-right)
       --logo-width <px>   Wordmark width in the 1920x1080 space (default: 360)
   -o, --out <dir>         Output directory (default: ./out)
       --guides            Overlay subject and platform-UI safe zones
@@ -100,13 +115,13 @@ node generate.mjs [options]
 Examples:
 
 ```
-node generate.mjs -d orbit -t dark        # one design, one theme
-node generate.mjs -t light                # just the light ground
-node generate.mjs -p bottom-right         # only the bottom corner
-node generate.mjs -m on                   # pre-flipped for your self-view
-npm run generate:all                      # every combination, 24 files
-node generate.mjs --scale 2               # 4K, for high-DPI cameras
-node generate.mjs --guides                # check the layout
+node generate-backgrounds.mjs -d orbit -t dark        # one design, one theme
+node generate-backgrounds.mjs -t light                # just the light ground
+node generate-backgrounds.mjs -p bottom-right         # only the bottom corner
+node generate-backgrounds.mjs -m on                   # pre-flipped for your self-view
+npm run generate:backgrounds:every-variant  # every corner, mirrored and not, into ./out
+node generate-backgrounds.mjs --scale 2               # 4K, for high-DPI cameras
+node generate-backgrounds.mjs --guides                # check the layout
 ```
 
 Files are named
@@ -167,13 +182,13 @@ Three things to hold to when adding one:
   means renders on both without branching.
 
 Themes themselves live in [`src/themes.mjs`](src/themes.mjs), and every value in
-them is mixed from two `brand/tokens.json` colours — so the grounds follow the
+them is mixed from two `brand/tokens.json` colours, so the grounds follow the
 site theme instead of drifting from it.
 
 ## How it renders
 
-`generate.mjs` builds a self-contained HTML page per design and screenshots it
-with headless Chrome, via the shared renderer in [`lib/chrome.mjs`](../lib/chrome.mjs).
+`generate-backgrounds.mjs` builds a self-contained HTML page per design and screenshots it
+with headless Chrome, via the shared renderer in [`@wingravity/render`](../render/index.mjs).
 That looks for Chrome, Chromium, Edge and Brave in the usual macOS and Linux
 locations; set `CHROME_PATH` to point it elsewhere.
 

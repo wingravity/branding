@@ -10,7 +10,16 @@
  * composition renders on charcoal and on paper without branching.
  *
  * Keep the centre of the frame quiet: that is where the person sits.
+ *
+ * Two optional fields: `themes` limits a design to some themes (the generator
+ * skips the rest with a note), and `artwork` names the 2021 source raster a
+ * design needs, so the generator can skip it when the sources are not present.
  */
+
+import { tokens } from "@wingravity/render";
+import { artwork, artworkSvg } from "../../social/src/artwork.mjs";
+
+const C = tokens().colors;
 
 /** Deterministic PRNG so a given design always renders identically. */
 function rng(seed) {
@@ -63,10 +72,34 @@ const vignette = (P) => `
   background:radial-gradient(120% 95% at 50% 45%,transparent 40%,${P.shade(0.55)} 100%)}
 `;
 
+/**
+ * The 2021 key visual, on its own flat gray.800 ground so the plate's edges
+ * disappear. It sits in the left third, high, clear of the person in the
+ * centre, the name chip bottom-left and the wordmark on the right. Dark only:
+ * the artwork was drawn for charcoal.
+ */
+const KV_SIZE = 600;
+const keyvisual = (name, what) => ({
+  description: `The 2021 key visual: ${what}. Dark only; needs local sources.`,
+  themes: ["dark"],
+  artwork: artwork[name].file,
+  build: () => {
+    const a = artworkSvg(name);
+    return {
+      css: `
+.sky{background:${C.gray["800"]}}
+.kv{position:absolute;left:-24px;top:110px;width:${KV_SIZE}px;height:${KV_SIZE}px}
+.kv svg{display:block;width:100%;height:100%}
+`,
+      layers: `<div class="kv"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${a.width} ${a.height}">${a.svg}</svg></div>`,
+    };
+  },
+});
+
 export const designs = {
   /** A slow teal aurora bleeding in from the top-left corner. */
   aurora: {
-    description: "A soft teal aurora bleeding in from one corner. The quietest option — safe anywhere.",
+    description: "A soft teal aurora bleeding in from one corner. The quietest option, safe anywhere.",
     build: (P) => ({
       css: `
 ${grain(P)}${vignette(P)}
@@ -129,7 +162,9 @@ ${STAR_CSS}${grain(P)}${vignette(P)}
   },
 
 
-
+  "keyvisual-astronaut": keyvisual("astronaut-square", "astronaut, laptop and moon"),
+  "keyvisual-telescope": keyvisual("telescope-square", "phone, telescope and moon"),
+  "keyvisual-shuttle": keyvisual("shuttle-square", "shuttle, laptop and moon"),
 };
 
 export const designNames = Object.keys(designs);

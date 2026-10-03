@@ -1,0 +1,18 @@
+{
+  "name": "@wingravity/social",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Social images: OG card, avatar, app icons, LinkedIn banner, X header",
+  "type": "module",
+  "scripts": {
+    "generate:social-images": "node generate-social-images.mjs",
+    "generate:social-images:with-guides": "node generate-social-images.mjs --guides",
+    "list:social-images": "node generate-social-images.mjs --list"
+  },
+  "dependencies": {
+    "@wingravity/render": "*"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@wingravity/guidelines",
+  "version": "1.0.0",
+  "private": true,
+  "description": "README imagery and the full brand guidelines page",
+  "type": "module",
+  "scripts": {
+    "generate:guidelines": "node generate-readme-images.mjs && node generate-guidelines.mjs"
+  },
+  "dependencies": {
+    "@wingravity/render": "*"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

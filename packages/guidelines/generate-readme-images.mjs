@@ -4,13 +4,13 @@
  * specimen. The wordmark itself is referenced straight from brand/logo/, so it
  * stays theme-aware on GitHub rather than being baked into a slab.
  *
- * These are documentation assets, so unlike tool output they are committed —
+ * These are documentation assets, so they are committed:
  * a README has to render for someone browsing GitHub, who is not going to run
  * a build first. Re-run after any change to brand/tokens.json.
  */
 
 import { join } from "node:path";
-import { screenshot, tokens, wordmark, fontFaces, ROOT } from "../lib/chrome.mjs";
+import { screenshot, tokens, wordmark, fontFaces, ROOT } from "@wingravity/render";
 
 const T = tokens();
 const C = T.colors;
@@ -92,7 +92,7 @@ const type = `<!doctype html><html><head><meta charset="utf-8"><style>${BASE}
   <div class="block"><div class="label mono">Kanit 400</div>
     <div class="sample k400">A senior product team for founders who need to ship.</div></div>
   <div class="block"><div class="label mono">Kanit 500</div>
-    <div class="sample k500">Outcomes over effort — since 2017.</div></div>
+    <div class="sample k500">Shipping products since 2017.</div></div>
   <div class="rule"></div>
   <div class="block"><div class="label mono">Space Mono 400</div>
     <div class="sample sm sm400">react · node · typescript · aws</div></div>
