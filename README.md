@@ -15,7 +15,7 @@
 <a href="https://docs.wingravity.com">Handbook</a> &nbsp;·&nbsp;
 <a href="https://wingravity.github.io/branding/">Guidelines</a> &nbsp;·&nbsp;
 <a href="#aesthetic">Aesthetic</a> &nbsp;·&nbsp;
-<a href="#colour">Colour</a> &nbsp;·&nbsp;
+<a href="#color">Color</a> &nbsp;·&nbsp;
 <a href="#type">Type</a> &nbsp;·&nbsp;
 <a href="#contents">Contents</a> &nbsp;·&nbsp;
 <a href="#voice">Voice</a>
@@ -28,7 +28,7 @@
 
 ## Aesthetic
 
-Dark, technical, one accent colour.
+Dark, technical, one accent color.
 
 | | |
 | :--- | :--- |
@@ -45,16 +45,16 @@ new space clip art beyond the key visual.
 
 ---
 
-## Colour
+## Color
 
-<img src="docs/assets/palette.png" alt="Wingravity colour palette" width="100%">
+<img src="docs/assets/palette.png" alt="Wingravity color palette" width="100%">
 
 Tokens in [`packages/brand/tokens.json`](packages/brand/tokens.json). Full table
 and contrast matrix in [`packages/brand/README.md`](packages/brand/README.md).
 
 > [!WARNING]
 > Teal on white is **1.68:1** and fails contrast. `primary` is a dark-surface
-> colour. On light grounds use `gray.900` for text and `primaryInk` (`#34786f`,
+> color. On light grounds use `gray.900` for text and `primaryInk` (`#34786f`,
 > 5.17:1 on white) for anything teal that has to be read.
 
 <br>
@@ -152,34 +152,12 @@ Edit the skill here, not the installed copy; the symlink keeps them the same.
 
 ---
 
-## Roadmap
-
-- [x] `TRADEMARK.md`. Name and logo reserved.
-- [x] `LICENSE` with a trademark carve-out.
-- [x] **Standalone mark.** The `wg` symbol, cut from the wordmark's own paths,
-      plus a vector app icon replacing the PNG-in-SVG favicon.
-- [x] `brand/` as a package (`@wingravity/brand`), with `tokens.css`.
-- [x] Social covers, posts and highlights rebuilt from the 2021 artwork, with
-      live type, at each platform's size.
-- [x] Logo rebuilt from the 2021 master; the g's tail is whole again.
-- [x] Email signature.
-- [x] Logo misuse examples, shown rather than described.
-- [ ] Publish `@wingravity/brand` and switch the website to consume it, so this
-      repo becomes the upstream source.
-- [ ] Replace the website's logo (its g has a chopped tail) and favicon set
-      with the files from `packages/brand/logo/`.
-- [ ] Illustration and photography direction.
-
-<br>
-
----
-
 <div align="center">
 <sub>
 
 Typefaces licensed under the SIL Open Font License. Wingravity&reg; is a
 registered trade mark, not covered by any code license in
-this repository. See <a href="TRADEMARK.md">TRADEMARK.md</a>.
+this repository. See [`TRADEMARK.md`](TRADEMARK.md).
 
 </sub>
 </div>
