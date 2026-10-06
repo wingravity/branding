@@ -2,7 +2,7 @@
 
 A Gmail-safe HTML signature for each person, built from the brand tokens:
 round photo, name, title, tagline and social icons, a divider, then phone,
-email, website and location, with the light wordmark underneath.
+email and website, with the light wordmark closing that column.
 
 ```
 npm run generate:signatures      # every data/*.local.json → out/<slug>.html + preview
@@ -31,13 +31,13 @@ still be checked.
 | `name`, `title`, `email`, `website` | yes | |
 | `nameSuffix` | no | Appended to the name in bold, e.g. `" - Founder"`. |
 | `tagline` | no | One line under the title. |
-| `phone`, `location` | no | Their rows are left out when empty. |
+| `phone` | no | Its row is left out when empty. |
 | `photo` | no | Path to a source image, relative to this package. Cropped to a circle. |
 | `photoPosition` | no | CSS `object-position` for the crop. Default `50% 50%`. |
 | `photoUrl` | no | Use an already-hosted round photo instead of `photo`. |
 | `socials` | no | `[{ "network", "url" }]`. Networks: `facebook`, `x`, `linkedin`, `instagram`. |
-| `showWordmark` | no | `false` hides the wordmark row. |
-| `assetBaseUrl` | yes | Where the images are hosted: `dist/` plus each photo. See below. |
+| `showWordmark` | no | `false` hides the wordmark under the contact rows. |
+| `assetBaseUrl` | no | Where the images are hosted. Default `https://branding.wingravity.com/email`. |
 
 Without a photo, the signature shows a `gray.200` disc with the person's
 initials, and the generator prints a warning.
@@ -47,17 +47,16 @@ initials, and the generator prints a warning.
 Gmail fetches signature images from a public URL. A file path or an embedded
 image gets stripped or sent as an attachment.
 
-`assetBaseUrl` defaults to `https://wingravity.com/brand/email`. **Nothing is
-hosted there yet.** Before pasting a signature, do one of these:
+The generator writes every image into `docs/email/`, which GitHub Pages serves
+at `https://branding.wingravity.com/email/`. The icons and wordmark are shared;
+each person adds one photo, `<slug>-photo@2x.png`. Before pasting a signature:
 
-| Option | How |
-| :--- | :--- |
-| Host on the site | Copy `dist/*` and `out/assets/*-photo@2x.png` into the website under `/brand/email/` and deploy. |
-| Host elsewhere | Upload the same files anywhere public, set `assetBaseUrl`, regenerate. |
+1. Commit and push `docs/email/`.
+2. Open `https://branding.wingravity.com/email/<slug>-photo@2x.png` in a
+   browser and check it loads.
 
-Then open `https://wingravity.com/brand/email/icon-phone@2x.png` in a browser
-to check it loads. The icons and wordmark are shared; each person adds one
-photo, `<slug>-photo@2x.png`.
+The photos are public once pushed, the same as in any email you send. Phone
+numbers and other details stay in the gitignored `out/<slug>.html`.
 
 ## Install in Gmail
 
@@ -89,9 +88,9 @@ same.
 | :--- | :--- |
 | `out/<slug>.html` | The signature to copy, with hosted image URLs. |
 | `out/<slug>-preview.png` | A screenshot using local images, for review before hosting. |
-| `out/assets/<slug>-photo@2x.png` | 192x192, shown at 96px. Transparent corners. |
-| `dist/icon-{phone,email,website,location}@2x.png` | 32x32, shown at 16px. |
-| `dist/icon-{facebook,x,linkedin,instagram}@2x.png` | 48x48, shown at 24px. |
-| `dist/wordmark-on-light@2x.png` | 240x40, shown at 120px wide. |
+| `docs/email/<slug>-photo@2x.png` | 192x192, shown at 96px. Transparent corners. |
+| `docs/email/icon-{phone,email,website}@2x.png` | 32x32, shown at 16px. |
+| `docs/email/icon-{facebook,x,linkedin,instagram}@2x.png` | 48x48, shown at 24px. |
+| `docs/email/wordmark-on-light@2x.png` | 240x40, shown at 120px wide. |
 
 Generation is deterministic. Re-running produces identical bytes.

@@ -10,7 +10,7 @@
  *   node generate-signatures.mjs data/someone.local.json  # one file
  *
  * Layout: round photo | name, title, tagline, social icons | divider | phone,
- * email, website, location. Gmail strips <style>, SVG, webfonts and
+ * email, website, wordmark. Gmail strips <style>, SVG, webfonts and
  * border-radius, so everything is a table with inline styles, and every image
  * (the photo already cut round, the icons, the wordmark) is a PNG referenced
  * by absolute URL.
@@ -26,10 +26,12 @@ import { findChrome, screenshot, tokens, wordmark, fontFaces } from "@wingravity
 const run = promisify(execFile);
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = join(HERE, "out");
-/** Each person's photo. Gitignored, with the rest of out/. */
-const ASSETS = join(OUT, "assets");
-/** Icons and wordmark, the same for everyone. Committed, ready to host. */
-const SHARED = join(HERE, "dist");
+/**
+ * Every image the signatures point at: icons, wordmark and each person's
+ * photo. Committed under docs/, which GitHub Pages serves at HOSTED_URL.
+ */
+const HOSTED = join(HERE, "..", "..", "docs", "email");
+const HOSTED_URL = "https://branding.wingravity.com/email";
 const C = tokens().colors;
 
 /** Display sizes in CSS pixels. Every image is rendered at 2x. */
@@ -103,7 +105,6 @@ const CONTACT_ICONS = {
   phone: line(`<path d="M21 16.4v2.8a1.9 1.9 0 0 1-2 1.9 18.6 18.6 0 0 1-8.1-2.9 18.3 18.3 0 0 1-5.6-5.6A18.6 18.6 0 0 1 2.4 4.5 1.9 1.9 0 0 1 4.3 2.5h2.8a1.9 1.9 0 0 1 1.9 1.6c.1.9.4 1.8.7 2.6a1.9 1.9 0 0 1-.4 2L8 9.9a15 15 0 0 0 5.6 5.6l1.2-1.2a1.9 1.9 0 0 1 2-.4c.8.3 1.7.6 2.6.7a1.9 1.9 0 0 1 1.6 1.8z"/>`),
   email: line(`<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M3 6.5l9 6.5 9-6.5"/>`),
   website: line(`<path d="M10 13.5a4.5 4.5 0 0 0 6.8.5l2.8-2.8a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6"/><path d="M14 10.5a4.5 4.5 0 0 0-6.8-.5l-2.8 2.8a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6"/>`),
-  location: line(`<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/>`),
 };
 
 const SOCIAL_ICONS = {
@@ -116,14 +117,13 @@ const SOCIAL_ICONS = {
 const SOCIAL_LABEL = { facebook: "Facebook", x: "X", linkedin: "LinkedIn", instagram: "Instagram" };
 
 async function renderSharedAssets() {
-  mkdirSync(SHARED, { recursive: true });
-  mkdirSync(ASSETS, { recursive: true });
-  await transparentPng({ body: sized(wordmark("light"), WORDMARK_W, WORDMARK_H), width: WORDMARK_W, height: WORDMARK_H, outPath: join(SHARED, "wordmark-on-light@2x.png") });
+  mkdirSync(HOSTED, { recursive: true });
+  await transparentPng({ body: sized(wordmark("light"), WORDMARK_W, WORDMARK_H), width: WORDMARK_W, height: WORDMARK_H, outPath: join(HOSTED, "wordmark-on-light@2x.png") });
   for (const [name, svg] of Object.entries(CONTACT_ICONS)) {
-    await transparentPng({ body: sized(svg, CONTACT, CONTACT), width: CONTACT, height: CONTACT, outPath: join(SHARED, `icon-${name}@2x.png`) });
+    await transparentPng({ body: sized(svg, CONTACT, CONTACT), width: CONTACT, height: CONTACT, outPath: join(HOSTED, `icon-${name}@2x.png`) });
   }
   for (const [name, svg] of Object.entries(SOCIAL_ICONS)) {
-    await transparentPng({ body: sized(svg, SOCIAL, SOCIAL), width: SOCIAL, height: SOCIAL, outPath: join(SHARED, `icon-${name}@2x.png`) });
+    await transparentPng({ body: sized(svg, SOCIAL, SOCIAL), width: SOCIAL, height: SOCIAL, outPath: join(HOSTED, `icon-${name}@2x.png`) });
   }
   console.log(`  ✓ assets: wordmark, ${Object.keys(CONTACT_ICONS).length} contact icons, ${Object.keys(SOCIAL_ICONS).length} social icons`);
 }
@@ -136,7 +136,7 @@ const initials = (name) =>
  * it round without border-radius. No photo: a neutral disc with initials.
  */
 async function renderPhoto(s, slug) {
-  const outPath = join(ASSETS, `${slug}-photo@2x.png`);
+  const outPath = join(HOSTED, `${slug}-photo@2x.png`);
   const src = s.photo && (isAbsolute(s.photo) ? s.photo : join(HERE, s.photo));
   let body;
   if (src && existsSync(src)) {
@@ -170,13 +170,16 @@ function contactRows(s, base) {
   if (s.phone) rows.push(["phone", `<a href="${telHref(s.phone)}" style="${LINK}">${esc(s.phone)}</a>`]);
   rows.push(["email", `<a href="mailto:${esc(s.email)}" style="${LINK}">${esc(s.email)}</a>`]);
   rows.push(["website", `<a href="${esc(s.website)}" style="${LINK}">${esc(bareUrl(s.website))}</a>`]);
-  if (s.location) rows.push(["location", esc(s.location)]);
-  return rows
+  const html = rows
     .map(([icon, html], i) => `<tr>
           <td style="padding:${i ? 7 : 0}px 10px 0 0;vertical-align:middle" valign="middle">${img(`${base}/icon-${icon}@2x.png`, CONTACT, CONTACT, icon)}</td>
           <td style="${TEXT};padding:${i ? 7 : 0}px 0 0 0;vertical-align:middle;white-space:nowrap" valign="middle">${html}</td>
-        </tr>`)
-    .join("\n        ");
+        </tr>`);
+  // The wordmark closes the column, where a fourth contact row would sit.
+  if (s.showWordmark !== false) {
+    html.push(`<tr><td colspan="2" style="padding:12px 0 0 0"><a href="${esc(s.website)}" style="text-decoration:none">${img(`${base}/wordmark-on-light@2x.png`, WORDMARK_W, WORDMARK_H, "Wingravity")}</a></td></tr>`);
+  }
+  return html.join("\n        ");
 }
 
 function socialRow(s, base) {
@@ -188,16 +191,10 @@ function socialRow(s, base) {
   return `<tr><td style="padding:14px 0 0 0"><table ${TABLE}><tr>${cells}</tr></table></td></tr>`;
 }
 
-/**
- * `base` is the hosted URL in the real file and a file:// URL in the preview.
- * Once hosted, photos sit next to the shared files; locally they live apart.
- */
-function buildSignature(s, slug, base, photoBase = base) {
-  const photoSrc = s.photoUrl ?? `${photoBase}/${slug}-photo@2x.png`;
+/** `base` is the hosted URL in the real file and a file:// URL in the preview. */
+function buildSignature(s, slug, base) {
+  const photoSrc = s.photoUrl ?? `${base}/${slug}-photo@2x.png`;
   const tagline = s.tagline ? `<tr><td style="${TEXT};padding:2px 0 0 0">${esc(s.tagline)}</td></tr>` : "";
-  const mark = s.showWordmark === false
-    ? ""
-    : `<tr><td colspan="3" style="padding:16px 0 0 0"><a href="${esc(s.website)}" style="text-decoration:none">${img(`${base}/wordmark-on-light@2x.png`, WORDMARK_W, WORDMARK_H, "Wingravity")}</a></td></tr>`;
 
   return `<table ${TABLE.replace('style="', `style="font-family:${FONT};`)}>
   <tr>
@@ -216,7 +213,6 @@ function buildSignature(s, slug, base, photoBase = base) {
       </table>
     </td>
   </tr>
-  ${mark}
 </table>`;
 }
 
@@ -245,20 +241,20 @@ await renderSharedAssets();
 
 for (const file of inputs(process.argv.slice(2))) {
   const s = JSON.parse(readFileSync(file, "utf8"));
-  for (const key of ["name", "title", "email", "website", "assetBaseUrl"]) {
+  for (const key of ["name", "title", "email", "website"]) {
     if (!s[key]) throw new Error(`${basename(file)} is missing "${key}".`);
   }
   const slug = slugify(s.name);
-  const base = s.assetBaseUrl.replace(/\/$/, "");
+  const base = (s.assetBaseUrl ?? HOSTED_URL).replace(/\/$/, "");
 
   if (!s.photoUrl) await renderPhoto(s, slug);
   writeFileSync(join(OUT, `${slug}.html`), page(`${s.name}, signature`, buildSignature(s, slug, base)));
 
   // The preview swaps hosted URLs for local files, so it renders before the
-  // assets are uploaded anywhere.
-  const preview = page("preview", buildSignature(s, slug, pathToFileURL(SHARED).href, pathToFileURL(ASSETS).href));
-  await screenshot({ html: preview, width: 820, height: 210, outPath: join(OUT, `${slug}-preview.png`), scale: 2 });
-  console.log(`  ✓ ${slug}.html, ${slug}-preview.png${s.photoUrl ? "" : `, assets/${slug}-photo@2x.png`}`);
+  // images are deployed.
+  const preview = page("preview", buildSignature(s, slug, pathToFileURL(HOSTED).href));
+  await screenshot({ html: preview, width: 820, height: 170, outPath: join(OUT, `${slug}-preview.png`), scale: 2 });
+  console.log(`  ✓ ${slug}.html, ${slug}-preview.png${s.photoUrl ? "" : `, docs/email/${slug}-photo@2x.png`}`);
 }
 
-console.log("\nHost dist/ and out/assets/<you>-photo@2x.png at assetBaseUrl before pasting into Gmail. See README.");
+console.log("\nCommit and push docs/email/ so Pages serves the images before pasting into Gmail. See README.");
