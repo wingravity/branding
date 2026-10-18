@@ -12,7 +12,7 @@
 **Brand system.** Tokens, logo, and the generators that use them.
 
 <a href="https://wingravity.com">Website</a> &nbsp;·&nbsp;
-<a href="https://docs.wingravity.com">Handbook</a> &nbsp;·&nbsp;
+<a href="https://handbook.wingravity.com">Handbook</a> &nbsp;·&nbsp;
 <a href="https://branding.wingravity.com/">Guidelines</a> &nbsp;·&nbsp;
 <a href="#aesthetic">Aesthetic</a> &nbsp;·&nbsp;
 <a href="#color">Color</a> &nbsp;·&nbsp;

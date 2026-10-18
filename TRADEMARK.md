@@ -29,7 +29,7 @@ Wingravity.
 - **Unmodified wordmark** in an article, deck or "built with" listing, using the
   files in [`brand/logo/`](packages/brand/logo/) and following the rules in
   [`brand/README.md`](packages/brand/README.md#logo).
-- **Linking** to wingravity.com or docs.wingravity.com.
+- **Linking** to wingravity.com or handbook.wingravity.com.
 
 ## Not permitted without written permission
 
